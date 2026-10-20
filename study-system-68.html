@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 68 - Learning in High School and University</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Lato:wght@400;700;900&display=swap');
+  :root{--blue:#1a4fa0;--orange:#e8630a;--green:#1a7a3c;--light-blue:#e8f0fb;--border:#e0e4ea;--bg:#f0f2f5}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Noto Sans JP',sans-serif;background:var(--bg);color:#222}
+  .header{background:var(--blue);color:white;padding:20px 24px 16px}
+  .header-top{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+  .unit-badge{background:var(--orange);color:white;font-family:'Lato',sans-serif;font-weight:900;font-size:13px;padding:3px 10px;border-radius:20px}
+  .header h1{font-size:17px;font-weight:900}
+  .header-sub{font-size:13px;opacity:.75;margin-top:2px}
+  .header-bar{height:4px;background:var(--orange)}
+  .steps-nav{background:white;border-bottom:1px solid var(--border);display:flex;overflow-x:auto}
+  .step-btn{flex:1;min-width:80px;padding:12px 8px;border:none;background:none;font-family:'Noto Sans JP',sans-serif;font-size:12px;font-weight:700;color:#888;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap}
+  .step-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
+  .step-btn:hover{background:var(--light-blue)}
+  .step-content{display:none;max-width:720px;margin:0 auto;padding:24px 20px 60px}
+  .step-content.active{display:block}
+  .listen-card{background:white;border-radius:12px;border:1px solid var(--border);padding:28px 24px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .listen-icon{font-size:48px;margin-bottom:12px}
+  .listen-title{font-size:18px;font-weight:900;margin-bottom:6px}
+  .listen-sub{font-size:13px;color:#888;margin-bottom:20px}
+  audio{width:100%;margin-top:8px}
+  .para-card{background:white;border-radius:12px;border:1px solid var(--border);padding:24px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .para-num{display:inline-block;background:var(--blue);color:white;font-family:'Lato',sans-serif;font-weight:900;font-size:12px;padding:2px 10px;border-radius:20px;margin-bottom:12px}
+  .para-en{font-family:'Lato',sans-serif;font-size:15px;line-height:1.9;margin-bottom:16px;color:#111}
+  .para-en em{font-style:normal;background:#fff3cd;padding:0 2px;border-radius:3px}
+  .para-ja{font-size:13px;line-height:1.9;color:#555;border-top:1px solid var(--border);padding-top:14px}
+  .box{border-radius:8px;padding:14px 16px;margin-top:14px;font-size:13px;line-height:1.8}
+  .vocab-box{background:#f0f7ff;border-left:4px solid var(--blue)}
+  .idiom-box{background:#fff5ee;border-left:4px solid var(--orange)}
+  .grammar-box{background:#f0fff4;border-left:4px solid var(--green)}
+  .box-title{font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;opacity:.7}
+  .check-q{background:#fafafa;border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-top:14px;font-size:13px}
+  .check-q-label{font-weight:700;color:var(--blue);font-size:12px;margin-bottom:6px}
+  .quiz-card{background:white;border-radius:12px;border:1px solid var(--border);padding:22px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .quiz-q{font-size:15px;font-weight:700;margin-bottom:16px;line-height:1.6}
+  .quiz-opts{display:flex;flex-direction:column;gap:10px}
+  .quiz-opt{padding:12px 16px;border:2px solid var(--border);border-radius:8px;cursor:pointer;font-size:14px;transition:all .15s;text-align:left;background:white;font-family:'Noto Sans JP',sans-serif}
+  .quiz-opt:hover{border-color:var(--blue);background:var(--light-blue)}
+  .quiz-opt.correct{border-color:var(--green);background:#f0fff4;color:var(--green)}
+  .quiz-opt.wrong{border-color:#e53e3e;background:#fff5f5;color:#c53030}
+  .quiz-fb{margin-top:12px;font-size:13px;padding:10px 14px;border-radius:8px;display:none;line-height:1.7}
+  .quiz-fb.show{display:block}
+  .quiz-fb.ok{background:#f0fff4;color:var(--green)}
+  .quiz-fb.ng{background:#fff5f5;color:#c53030}
+  .quiz-score{text-align:center;padding:24px;background:white;border-radius:12px;border:1px solid var(--border);margin-top:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+  .score-num{font-size:48px;font-weight:900;color:var(--blue);font-family:'Lato',sans-serif}
+  .retry-btn{margin-top:16px;padding:12px 32px;background:var(--blue);color:white;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif}
+  .fc-wrap{max-width:400px;margin:0 auto}
+  .fc-card{background:white;border-radius:16px;border:1px solid var(--border);min-height:200px;display:flex;align-items:center;justify-content:center;text-align:center;padding:32px 24px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.08);transition:transform .1s;user-select:none;margin-bottom:16px}
+  .fc-card:active{transform:scale(.97)}
+  .fc-front{font-family:'Lato',sans-serif;font-size:22px;font-weight:700;color:var(--blue)}
+  .fc-back{display:none}
+  .fc-back-en{font-family:'Lato',sans-serif;font-size:18px;font-weight:700;color:var(--blue);margin-bottom:8px}
+  .fc-back-ja{font-size:15px;color:#555;margin-bottom:12px}
+  .fc-back-ex{font-size:13px;color:#777;font-style:italic;line-height:1.7}
+  .fc-hint{font-size:12px;color:#aaa;margin-bottom:16px;text-align:center}
+  .fc-btns{display:flex;gap:12px;justify-content:center;margin-bottom:24px}
+  .fc-btn{padding:10px 24px;border:2px solid var(--border);border-radius:8px;cursor:pointer;font-size:14px;font-weight:700;font-family:'Noto Sans JP',sans-serif;background:white;transition:all .15s}
+  .fc-btn.know{border-color:var(--green);color:var(--green)}
+  .fc-btn.know:hover{background:var(--green);color:white}
+  .fc-btn.review{border-color:var(--orange);color:var(--orange)}
+  .fc-btn.review:hover{background:var(--orange);color:white}
+  .fc-progress{font-size:13px;color:#888;text-align:center;margin-bottom:16px}
+  .fc-done{text-align:center;padding:32px 24px;background:white;border-radius:12px;border:1px solid var(--border)}
+  .step-header{font-size:16px;font-weight:900;color:var(--blue);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--light-blue)}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-top">
+    <span class="unit-badge">Unit 68</span>
+    <h1>Learning in High School and University</h1>
+  </div>
+  <div class="header-sub">高校と大学での学び</div>
+</div>
+<div class="header-bar"></div>
+
+<nav class="steps-nav">
+  <button class="step-btn active" onclick="showStep(1)">🎧 Step 1 Listen</button>
+  <button class="step-btn" onclick="showStep(2)">📖 Step 2 Read</button>
+  <button class="step-btn" onclick="showStep(3)">✏️ Step 3 Quiz</button>
+  <button class="step-btn" onclick="showStep(4)">🃏 Step 4 Flashcards</button>
+</nav>
+
+<!-- STEP 1 -->
+<div class="step-content active" id="step1">
+  <div class="listen-card">
+    <div class="listen-icon">🎧</div>
+    <div class="listen-title">Unit 68 — Learning in High School and University</div>
+    <div class="listen-sub">音声を聞いてから、英文を読もう</div>
+    <audio controls src="sokujukure202_eibun68.mp3"></audio>
+  </div>
+</div>
+
+<!-- STEP 2 -->
+<div class="step-content" id="step2">
+  <div class="step-header">📖 英文を読む</div>
+
+  <!-- Para 1 -->
+  <div class="para-card">
+    <span class="para-num">Para 1</span>
+    <div class="para-en">
+      A university or college has three main roles. The first is to acquire an advanced education — understanding and using specialized knowledge in fields of study. The second is to learn research methods and acquire skills in a specialty. The third is to learn problem-solving. There are many challenges new students face, and moving from high school to college provides students with many learning opportunities. It also requires responsibility because you have to determine what you want to study and how to <em>put it into practice</em>.
+    </div>
+    <div class="para-ja">
+      大学には3つの主要な役割がある。1つ目は、高度な教育を受けること——特定の学問分野における専門知識を理解し活用することだ。2つ目は、研究方法を学び、専門分野のスキルを身につけることだ。3つ目は、問題解決を学ぶことだ。新入生が直面する課題は多くあり、高校から大学への移行は多くの学習機会を提供する。また、何を学びたいか、どのようにそれを実践するかを自分で決める必要があるため、責任も求められる。
+    </div>
+    <div class="box vocab-box">
+      <div class="box-title">📘 Vocabulary</div>
+      <strong>acquire</strong>（習得する）／ <strong>specialized knowledge</strong>（専門知識）／ <strong>specialty</strong>（専門分野）／ <strong>problem-solving</strong>（問題解決）／ <strong>opportunity</strong>（機会）／ <strong>determine</strong>（決める）
+    </div>
+    <div class="box idiom-box">
+      <div class="box-title">🔑 Idiom / Phrase</div>
+      <strong>put A into practice</strong>：Aを実践する、実行に移す<br>
+      例）It is not easy to put new ideas into practice.（新しいアイデアを実践するのは簡単ではない。）
+    </div>
+    <div class="check-q">
+      <div class="check-q-label">🔍 CHECK</div>
+      大学の3つの主な役割を答えよ。<br>
+      →①高度な教育（専門知識）、②研究方法とスキルの習得、③問題解決を学ぶこと。
+    </div>
+  </div>
+
+  <!-- Para 2 -->
+  <div class="para-card">
+    <span class="para-num">Para 2</span>
+    <div class="para-en">
+      High school students study mostly the same subjects, but university students break off into different schools or departments to pursue specialized fields. Professors at universities are both educators and researchers, so they train students to go deeper into their fields of interest. And instead of <em>sticking to</em> a textbook, university students have to identify problems and search for solutions. For example, high school students have to know historical facts, but university learning is more about reading between the lines and <em>inquiring into</em> the reasons these things happened.
+    </div>
+    <div class="para-ja">
+      高校生はほぼ同じ科目を学ぶが、大学生は異なる学部や学科に分かれて専門分野を追求する。大学の教授は教育者であると同時に研究者でもあるため、学生が自分の興味分野をより深く掘り下げられるよう指導する。また、教科書にこだわるのではなく、大学生は問題を特定し、解決策を探らなければならない。たとえば、高校では歴史的事実を覚えるが、大学での学びは行間を読むことや、物事がなぜそうなったかを探究することにある。
+    </div>
+    <div class="box vocab-box">
+      <div class="box-title">📘 Vocabulary</div>
+      <strong>break off into</strong>（〜に分かれる）／ <strong>department</strong>（学部、学科）／ <strong>pursue</strong>（追求する）／ <strong>identify</strong>（特定する）／ <strong>historical facts</strong>（歴史的事実）／ <strong>read between the lines</strong>（行間を読む）
+    </div>
+    <div class="box idiom-box">
+      <div class="box-title">🔑 Idiom / Phrase</div>
+      <strong>stick to ~</strong>：〜にこだわる、〜を守り続ける<br>
+      例）Stick to your plan.（計画を守りなさい。）<br><br>
+      <strong>inquire into ~</strong>：〜を探究する、調査する<br>
+      例）The philosopher spent his life inquiring into truth.（その哲学者は真理を探求することに生涯を費やした。）
+    </div>
+    <div class="check-q">
+      <div class="check-q-label">🔍 CHECK</div>
+      高校の学びと大学の学びの最大の違いは何か？<br>
+      →高校は事実を覚えるが、大学は行間を読み、なぜそうなったかを探究すること。
+    </div>
+  </div>
+
+  <!-- Para 3 -->
+  <div class="para-card">
+    <span class="para-num">Para 3</span>
+    <div class="para-en">
+      At university, you will read, write, and work harder than you have ever worked before. You should think about <em>entering into</em> a field that you can <em>go on to</em> work in as an adult. If you don't keep pace with your studies, you will fall behind. And most of all, you should study <em>for the sake of</em> your future, not just to pass exams. A great future is <em>in store for</em> those who are <em>ready to</em> take on new challenges.
+    </div>
+    <div class="para-ja">
+      大学では、これまでよりも読み、書き、懸命に勉強することになる。大人になっても続けて働ける分野に進むことを考えるべきだ。勉強についていけなければ遅れを取ることになる。何より大切なのは、試験に合格するためだけでなく、自分の将来のために学ぶことだ。新しい挑戦に積極的に取り組む人には、明るい未来が待っている。
+    </div>
+    <div class="box idiom-box">
+      <div class="box-title">🔑 Idiom / Phrase</div>
+      <strong>enter into ~</strong>：〜に入る、〜に乗り出す<br>
+      例）We have entered into a partnership with them.（私たちは彼らとパートナーシップを結んだ。）<br><br>
+      <strong>go on to do</strong>：続けて〜する、その後〜する<br>
+      例）She went on to become a doctor.（彼女はその後医師になった。）<br><br>
+      <strong>keep pace with ~</strong>：〜に遅れずについていく<br>
+      例）He's struggling to keep pace with the other students.（彼は他の学生についていくのに苦労している。）<br><br>
+      <strong>for the sake of ~</strong>：〜のために<br>
+      例）He worked hard for the sake of his family.（彼は家族のために一生懸命働いた。）
+    </div>
+    <div class="box grammar-box">
+      <div class="box-title">📗 Grammar</div>
+      <strong>in store for ~</strong>：〜を待っている、〜のために用意されている<br>
+      例）A great future is in store for us.（私たちには素晴らしい未来が待っている。）<br><br>
+      <strong>be ready to do</strong>：〜する準備ができている、進んで〜する<br>
+      例）Are you ready to face the reality?（現実に向き合う準備はできていますか？）
+    </div>
+    <div class="check-q">
+      <div class="check-q-label">🔍 CHECK</div>
+      筆者が「試験合格のためだけでなく」何のために学ぶべきだと言っているか？<br>
+      →自分の将来（for the sake of your future）のために。
+    </div>
+  </div>
+
+  <!-- Para 4 -->
+  <div class="para-card">
+    <span class="para-num">Para 4</span>
+    <div class="para-en">
+      In the past, university education was <em>in pursuit of</em> knowledge for its own sake. Today, however, universities are expected to produce graduates who are ready to contribute to society. Students who <em>know their subject by heart</em> and can apply it creatively will be the ones who succeed. Whether you want to become a researcher, a businessperson, or a public servant, the skills and knowledge you gain at university will be the foundation of your career.
+    </div>
+    <div class="para-ja">
+      かつて大学教育は、知識そのものを追求するためのものだった。しかし今日では、大学は社会に貢献できる準備の整った卒業生を輩出することが期待されている。自分の専門を熟知し、創造的に応用できる学生が成功する人物となるだろう。研究者になりたいのか、ビジネスパーソンになりたいのか、公務員になりたいのかにかかわらず、大学で得たスキルと知識がキャリアの基盤となる。
+    </div>
+    <div class="box idiom-box">
+      <div class="box-title">🔑 Idiom / Phrase</div>
+      <strong>in pursuit of ~</strong>：〜を追求して、〜を求めて<br>
+      例）The philosopher spent his life in pursuit of truth.（その哲学者は真理の探求に生涯を費やした。）<br><br>
+      <strong>know ~ by heart</strong>：〜を暗記している、そらで言える<br>
+      例）He learned all the lyrics of the song by heart.（彼はその歌の歌詞をすべて暗記した。）
+    </div>
+    <div class="check-q">
+      <div class="check-q-label">🔍 CHECK</div>
+      現代の大学に求められていることは何か？<br>
+      →社会に貢献できる準備の整った卒業生を輩出すること。
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="step-content" id="step3">
+  <div class="step-header">✏️ 理解度チェッククイズ</div>
+
+  <div class="quiz-card">
+    <div class="quiz-q">Q1. According to the passage, what are the THREE main roles of a university?</div>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answer(this,'wrong',1)">A. Teaching languages, sports, and arts</button>
+      <button class="quiz-opt" onclick="answer(this,'correct',1)">B. Advanced education, research skills, and problem-solving</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',1)">C. Making friends, joining clubs, and finding jobs</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',1)">D. Memorizing facts, taking exams, and getting grades</button>
+    </div>
+    <div class="quiz-fb" id="fb1">✅ 正解！大学の3つの役割は、①高度な教育（専門知識）、②研究方法・スキルの習得、③問題解決です。</div>
+  </div>
+
+  <div class="quiz-card">
+    <div class="quiz-q">Q2. How is university learning different from high school learning?</div>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answer(this,'wrong',2)">A. University students study more subjects than high school students</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',2)">B. High school students must do more research than university students</button>
+      <button class="quiz-opt" onclick="answer(this,'correct',2)">C. University learning focuses on finding reasons and solutions, not just memorizing facts</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',2)">D. University students follow a textbook more closely than high school students</button>
+    </div>
+    <div class="quiz-fb" id="fb2">✅ 正解！大学の学びは、事実を暗記するだけでなく、行間を読み、なぜそうなったかを探究することに重点が置かれます。</div>
+  </div>
+
+  <div class="quiz-card">
+    <div class="quiz-q">Q3. What does "keep pace with your studies" mean in the passage?</div>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answer(this,'wrong',3)">A. To study faster than other students</button>
+      <button class="quiz-opt" onclick="answer(this,'correct',3)">B. To keep up with your studies without falling behind</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',3)">C. To take a break and walk at a comfortable pace</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',3)">D. To choose the subjects you like</button>
+    </div>
+    <div class="quiz-fb" id="fb3">✅ 正解！"keep pace with"は「〜に遅れずついていく」という意味です。</div>
+  </div>
+
+  <div class="quiz-card">
+    <div class="quiz-q">Q4. According to the passage, why should students study at university?</div>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answer(this,'wrong',4)">A. Just to pass exams and get good grades</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',4)">B. To please their parents and teachers</button>
+      <button class="quiz-opt" onclick="answer(this,'correct',4)">C. For the sake of their own future</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',4)">D. To win scholarships</button>
+    </div>
+    <div class="quiz-fb" id="fb4">✅ 正解！試験合格のためだけでなく、自分の将来（for the sake of your future）のために学ぶことが大切です。</div>
+  </div>
+
+  <div class="quiz-card">
+    <div class="quiz-q">Q5. What does "know ~ by heart" mean?</div>
+    <div class="quiz-opts">
+      <button class="quiz-opt" onclick="answer(this,'wrong',5)">A. To understand something deeply with emotion</button>
+      <button class="quiz-opt" onclick="answer(this,'correct',5)">B. To have memorized something completely</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',5)">C. To care deeply about something</button>
+      <button class="quiz-opt" onclick="answer(this,'wrong',5)">D. To learn from someone's personal experience</button>
+    </div>
+    <div class="quiz-fb" id="fb5">✅ 正解！"know ~ by heart"は「〜を暗記している、そらで言える」という意味です。</div>
+  </div>
+
+  <div class="quiz-score" id="quiz-score" style="display:none">
+    <div class="score-num" id="score-num">0/5</div>
+    <div style="margin-top:8px;font-size:15px;color:#555">お疲れ様でした！</div>
+    <button class="retry-btn" onclick="retryQuiz()">もう一度挑戦する</button>
+  </div>
+</div>
+
+<!-- STEP 4 -->
+<div class="step-content" id="step4">
+  <div class="step-header">🃏 イディオム・フレーズ フラッシュカード</div>
+  <div class="fc-wrap">
+    <div class="fc-progress" id="fc-progress">1 / 10</div>
+    <div class="fc-hint">タップしてうら面を見る</div>
+    <div class="fc-card" id="fc-card" onclick="flipCard()">
+      <div class="fc-front" id="fc-front"></div>
+      <div class="fc-back" id="fc-back"></div>
+    </div>
+    <div class="fc-btns">
+      <button class="fc-btn review" onclick="markCard(false)">🔁 もう一度</button>
+      <button class="fc-btn know" onclick="markCard(true)">✅ 覚えた！</button>
+    </div>
+    <div class="fc-done" id="fc-done" style="display:none">
+      <div style="font-size:32px;margin-bottom:12px">🎉</div>
+      <div style="font-size:18px;font-weight:900;margin-bottom:8px">全カード完了！</div>
+      <div style="font-size:14px;color:#555;margin-bottom:20px">よく頑張りました！</div>
+      <button class="retry-btn" onclick="shuffleCards()">もう一度やる</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function showStep(n){
+  document.querySelectorAll('.step-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.step-btn').forEach(el=>el.classList.remove('active'));
+  document.getElementById('step'+n).classList.add('active');
+  document.querySelectorAll('.step-btn')[n-1].classList.add('active');
+}
+
+let scores={},answered={};
+function answer(btn,type,qn){
+  if(answered[qn])return;
+  answered[qn]=true;
+  btn.closest('.quiz-opts').querySelectorAll('.quiz-opt').forEach(o=>o.style.pointerEvents='none');
+  btn.classList.add(type);
+  const fb=document.getElementById('fb'+qn);
+  if(type==='correct'){scores[qn]=1;fb.classList.add('ok','show');}
+  else{scores[qn]=0;fb.textContent='❌ 不正解。本文をもう一度確認しよう！';fb.classList.add('ng','show');}
+  if(Object.keys(answered).length===5)showScore();
+}
+function showScore(){
+  const total=Object.values(scores).reduce((a,b)=>a+b,0);
+  document.getElementById('score-num').textContent=total+'/5';
+  document.getElementById('quiz-score').style.display='block';
+}
+function retryQuiz(){
+  scores={};answered={};
+  document.querySelectorAll('.quiz-opt').forEach(o=>{o.classList.remove('correct','wrong');o.style.pointerEvents='';});
+  document.querySelectorAll('.quiz-fb').forEach(f=>f.classList.remove('show','ok','ng'));
+  document.getElementById('fb1').textContent='✅ 正解！大学の3つの役割は、①高度な教育（専門知識）、②研究方法・スキルの習得、③問題解決です。';
+  document.getElementById('fb2').textContent='✅ 正解！大学の学びは、事実を暗記するだけでなく、行間を読み、なぜそうなったかを探究することに重点が置かれます。';
+  document.getElementById('fb3').textContent='✅ 正解！"keep pace with"は「〜に遅れずついていく」という意味です。';
+  document.getElementById('fb4').textContent='✅ 正解！試験合格のためだけでなく、自分の将来（for the sake of your future）のために学ぶことが大切です。';
+  document.getElementById('fb5').textContent='✅ 正解！"know ~ by heart"は「〜を暗記している、そらで言える」という意味です。';
+  document.getElementById('quiz-score').style.display='none';
+}
+
+const cards=[
+  {front:'put A into practice',ja:'Aを実践する、実行に移す',ex:'It is not easy to put new ideas into practice.\n（新しいアイデアを実践するのは簡単ではない。）'},
+  {front:'stick to ~',ja:'〜にこだわる、〜を守り続ける',ex:'Stick to your plan.\n（計画を守りなさい。）'},
+  {front:'inquire into ~',ja:'〜を探究する、調査する',ex:'The philosopher spent his life inquiring into truth.\n（その哲学者は真理を探求することに生涯を費やした。）'},
+  {front:'enter into ~',ja:'〜に入る、〜に乗り出す',ex:'We have entered into a partnership with them.\n（私たちは彼らとパートナーシップを結んだ。）'},
+  {front:'keep pace with ~',ja:'〜に遅れずついていく',ex:"He's struggling to keep pace with the other students.\n（彼は他の学生についていくのに苦労している。）"},
+  {front:'fall behind',ja:'遅れをとる、落後する',ex:'We are falling behind in the clean-energy race.\n（私たちはクリーンエネルギー競争で遅れをとっている。）'},
+  {front:'for the sake of ~',ja:'〜のために',ex:'He worked hard for the sake of his family.\n（彼は家族のために一生懸命働いた。）'},
+  {front:'in store for ~',ja:'〜を待っている、〜に用意されている',ex:'A great future is in store for us.\n（私たちには素晴らしい未来が待っている。）'},
+  {front:'in pursuit of ~',ja:'〜を追求して、〜を求めて',ex:'The philosopher spent his life in pursuit of truth.\n（その哲学者は真理の探求に生涯を費やした。）'},
+  {front:'know ~ by heart',ja:'〜を暗記している、そらで言える',ex:'He learned all the lyrics of the song by heart.\n（彼はその歌の歌詞をすべて暗記した。）'},
+];
+
+let deck=[...cards],ci=0,flipped=false;
+
+function shuffleCards(){
+  deck=[...cards].sort(()=>Math.random()-.5);
+  ci=0;flipped=false;
+  document.getElementById('fc-done').style.display='none';
+  document.getElementById('fc-card').style.display='flex';
+  document.querySelector('.fc-btns').style.display='flex';
+  document.querySelector('.fc-hint').style.display='block';
+  renderCard();
+}
+function renderCard(){
+  if(ci>=deck.length){
+    document.getElementById('fc-card').style.display='none';
+    document.querySelector('.fc-btns').style.display='none';
+    document.querySelector('.fc-hint').style.display='none';
+    document.getElementById('fc-done').style.display='block';
+    return;
+  }
+  const c=deck[ci];flipped=false;
+  document.getElementById('fc-front').textContent=c.front;
+  document.getElementById('fc-front').style.display='block';
+  document.getElementById('fc-back').innerHTML=`<div class="fc-back-en">${c.front}</div><div class="fc-back-ja">${c.ja}</div><div class="fc-back-ex">${c.ex.replace(/\n/g,'<br>')}</div>`;
+  document.getElementById('fc-back').style.display='none';
+  document.getElementById('fc-progress').textContent=(ci+1)+' / '+deck.length;
+}
+function flipCard(){
+  flipped=!flipped;
+  document.getElementById('fc-front').style.display=flipped?'none':'block';
+  document.getElementById('fc-back').style.display=flipped?'block':'none';
+}
+function markCard(known){
+  if(!flipped)flipCard();
+  setTimeout(()=>{if(!known)deck.push(deck[ci]);ci++;renderCard();},300);
+}
+shuffleCards();
+</script>
+</body>
+</html>
